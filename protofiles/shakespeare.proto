@@ -1,0 +1,18 @@
+syntax = "proto3";
+package protofiles;
+// option go_package = "./";
+option go_package = "github.com/gjlanc65/grpcprototest/protofiles";
+
+message QuoteRequest {
+  int32       first   = 1;
+  int32       second  = 2;
+  int32       third   = 3;
+}
+
+message QuoteResponse {
+  string    quote   = 1;
+}
+
+service QuoteTransaction {
+  rpc MakeQuote(QuoteRequest) returns (QuoteResponse) {}
+}
