@@ -27,8 +27,8 @@ func main() {
 	}
 
 	// We are making use of the function that compiled proto made for us to register
-	// our GRPC server so that the clients can make use of the functions tide to our
-	// server remotely via the GRPC server (like MakeTransaction function)
+	// our GRPC server so that the clients can make use of the functions tied to our
+	// server remotely via the GRPC server (like MakeQuote function)
 
 	// The first argument is the grpc server instance
 	// The second argument is the service who's methods we want to expose (in our case)
@@ -55,6 +55,6 @@ func (s *server) MakeQuote(ctx context.Context, in *pb.QuoteRequest) (*pb.QuoteR
 	fmt.Println("Got first  ", in.First)
 	fmt.Println("Got second ", in.Second)
 	fmt.Println("Got third  ", in.Third)
-	// Returning a response of type Transaction Response
+	// Returning a response of type QuoteResponse
 	return &pb.QuoteResponse{Quote: "willy shakeit"}, nil
 }
