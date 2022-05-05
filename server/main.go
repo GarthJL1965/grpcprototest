@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/signal"
 
 	pb "github.com/gjlanc65/grpcprototest/protofiles"
 	"golang.org/x/net/context"
@@ -11,17 +13,21 @@ import (
 	_ "google.golang.org/grpc/reflection"
 )
 
+const (
+	defaultPort = ":8000"
+)
+
 type server struct {
 	pb.UnimplementedQuoteTransactionServer
 }
 
 func main() {
-	fmt.Println("Quote Server ...")
+	fmt.Println("Quote Server starting up ...")
 
 	// NewServer creates a gRPC server which has no service registered and has not started
 	// to accept requests yet.
 	s := grpc.NewServer()
-	lis, err := net.Listen("tcp", ":8000")
+	lis, err := net.Listen("tcp", defaultPort)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -38,10 +44,26 @@ func main() {
 	// Serve accepts incoming connections on the listener lis, creating a new ServerTransport
 	// and service goroutine for each. The service goroutines read gRPC requests and then
 	// call the registered handlers to reply to them.
-	err = s.Serve(lis)
-	if err != nil {
-		log.Fatalf("Failed to serve: %v", err)
-	}
+
+	go func() {
+		//fmt.Println("Server running on ", (hostname + ":" + port))
+		fmt.Println("Server running on tcp (localhost):8000")
+		if err := s.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %v", err)
+		}
+	}()
+
+	// Wait for Control C to exit
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+
+	// Block until a signal is received
+	<-ch
+	fmt.Println("Stopping the server")
+	s.Stop()
+	fmt.Println("Closing the listener")
+	lis.Close()
+	fmt.Println("Server has been Shut down")
 
 }
 
