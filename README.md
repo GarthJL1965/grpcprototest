@@ -26,3 +26,6 @@ says 'use a random number [0,#size-1]' for that segment
 ## Internal notes
 * server 'traps' Control-C/Break and terminates
 * client is 'one shot'
+* streaming not used [yet] - will eventually  change static db for a cursor and then might consider streaming by 'stanza'
+
+## static_data is latest branch (in progress)
