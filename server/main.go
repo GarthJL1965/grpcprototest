@@ -22,7 +22,7 @@ type server struct {
 }
 
 func main() {
-	fmt.Println("Quote Server starting up ...")
+	log.Println("Quote Server starting up ...")
 
 	// NewServer creates a gRPC server which has no service registered and has not started
 	// to accept requests yet.
@@ -46,8 +46,7 @@ func main() {
 	// call the registered handlers to reply to them.
 
 	go func() {
-		//fmt.Println("Server running on ", (hostname + ":" + port))
-		fmt.Println("Server running on tcp (localhost):8000")
+		log.Println("Server running on tcp (localhost):8000")
 		if err := s.Serve(lis); err != nil {
 			log.Fatalf("failed to serve: %v", err)
 		}
@@ -59,11 +58,11 @@ func main() {
 
 	// Block until a signal is received
 	<-ch
-	fmt.Println("Stopping the server")
+	log.Println("Stopping the server")
 	s.Stop()
-	fmt.Println("Closing the listener")
+	log.Println("Closing the listener")
 	lis.Close()
-	fmt.Println("Server has been Shut down")
+	log.Println("Server has been Shut down")
 
 }
 
